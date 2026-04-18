@@ -86,7 +86,7 @@ namespace PoolPlugin
             prefab.SetActive(false);
             var result = UnityEngine.Object.Instantiate(prefab);
             prefab.SetActive(true);
-            var s = result.GetComponent<IPoolable>();
+            var s = result.GetComponent<IPoolable>() ?? result.AddComponent<ComponentPooled>();
             s.pool = this;
             result.SetActive(true);
             return result;
@@ -97,7 +97,7 @@ namespace PoolPlugin
             prefab.SetActive(false);
             var result = UnityEngine.Object.Instantiate(prefab);
             prefab.SetActive(true);
-            var s = result.GetComponent<IPoolable>();
+            var s = result.GetComponent<IPoolable>() ?? result.AddComponent<ComponentPooled>();
             s.pool = this;
             return result;
          }
@@ -105,7 +105,7 @@ namespace PoolPlugin
          public GameObject CreateInactiveSilently()
          {
             var result = UnityEngine.Object.Instantiate(prefab);
-            var s      = result.GetComponent<IPoolable>();
+            var s      = result.GetComponent<IPoolable>() ?? result.AddComponent<ComponentPooled>();
             s.pool = this;
             return result;
          }

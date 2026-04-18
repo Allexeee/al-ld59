@@ -7,7 +7,7 @@ public static class G
 {
    public static GameMainService       main;
    public static GameManager           game;
-   public static SpawnerManager        factory;
+   public static SpawnerManager        spawner;
    public static AudioService          audio;
    public static Db                    db;
    public static PoolGameObjectService poolGameObject;

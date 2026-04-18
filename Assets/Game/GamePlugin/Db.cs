@@ -22,9 +22,9 @@ public partial class Db
       return assets.Get<AssetAudio>(id).GetMain();
    }
 
-   public AssetAbstract GetAsset(AssetId assetId)
+   public AssetContainer GetAsset(AssetId assetId)
    {
-      return assets.Get(assetId);
+      return assets.Get(assetId) as AssetContainer;
    }
    
    public T GetAsset<T>(AssetId assetId) where T : AssetAbstract => assets.Get<T>(assetId);

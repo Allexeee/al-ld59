@@ -19,7 +19,7 @@ public class GameMainService : MonoBehaviour
    {
       // Scene Loading
       G.main           = this;
-      G.factory        = spawnerManager;
+      G.spawner        = spawnerManager;
       G.game           = gameManager;
       G.audio          = new AudioService(audioManager, new AudioMixers("Audio/Mixers"));
       G.db             = new Db(new AssetsService(64));

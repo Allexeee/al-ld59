@@ -109,20 +109,20 @@ namespace AssetsPlugin
 
    public class AssetPrefab : AssetAbstract
    {
-      const string basePath = "GameContent/Prefabs/";
+      const string basePath = "Content/Prefabs/";
 
-      public GameObject gameObject;
+      public GameObject prefab;
       public bool       pooled;
 
-      public AssetPrefab(GameObject gameObject, bool pooled)
+      public AssetPrefab(GameObject prefab, bool pooled)
       {
-         this.gameObject = gameObject;
+         this.prefab = prefab;
          this.pooled     = pooled;
       }
 
       public AssetPrefab(string path, bool pooled)
       {
-         gameObject  = Resources.Load<GameObject>(basePath + path);
+         prefab  = Resources.Load<GameObject>(basePath + path);
          this.pooled = pooled;
       }
    }

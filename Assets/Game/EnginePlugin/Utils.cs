@@ -116,4 +116,33 @@ public static class Utils
          (list[k], list[n]) = (list[n], list[k]);
       }
    }
+   
+   public static Vector2 WithOffsetX(this Vector2 vector, float x)
+   {
+      vector.x += x;
+      return vector;
+   }
+
+   public static Vector2 WithOffsetY(this Vector2 vector, float y)
+   {
+      vector.y += y;
+      return vector;
+   }
+      
+   public static Vector3 WithOffsetY(this Vector3 vector, float y)
+   {
+      vector.y += y;
+      return vector;
+   }
+
+   public static T AddItem<T>(this IList<T> list, T item)
+   {
+      list.Add(item);
+      return item;
+   }
+
+   public static T NewItem<T, TY>(this IDictionary<TY, T> dic, TY key) where T : new()
+   {
+      return dic[key] = new T();
+   }
 }
