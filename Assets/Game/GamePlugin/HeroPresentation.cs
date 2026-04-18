@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class HeroPresentation : MonoBehaviour
 {
-   [SerializeField] Transform      body;
-   [SerializeField] Rigidbody2D    rigidbody;
-   public           AssetContainer asset;
+   [SerializeField]     Transform      body;
+   [SerializeField] new Rigidbody2D    rigidbody;
+   public               AssetContainer asset;
 
    void Awake()
    {

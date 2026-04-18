@@ -4,6 +4,7 @@ public class HeroController
 {
    public Vector2 movement;
    public bool    wantInteract;
+   public bool    wantShot;
    
    public void OnInput()
    {
@@ -32,5 +33,6 @@ public class HeroController
       movement = movement.normalized;
 
       wantInteract = Input.GetKeyDown(KeyCode.Space);
+      wantShot     = Input.GetKey(KeyCode.Mouse0);
    }
 }

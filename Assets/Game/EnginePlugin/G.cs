@@ -14,4 +14,5 @@ public static class G
    public static PoolAnyObject         poolAnyObject;
    public static EventsService         events;
    public static SchedulerManager      scheduler;
+   public static CameraService         camera;
 }

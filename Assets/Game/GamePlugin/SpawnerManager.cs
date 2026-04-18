@@ -42,4 +42,24 @@ public class SpawnerManager : MonoBehaviour
       go.transform.position = position;
       go.SetActive(true);
    }
+
+   public void SpawnEnemy(Vector2 position)
+   {
+      var asset = G.db.GetAsset(AssetId.Enemy);
+      var go    = SpawnInactive(asset.As<AssetPrefab>());
+      go.transform.position = position;
+      go.SetActive(true);
+   }
+
+   public void SpawnProjectile(Vector2 start, Vector2 direction)
+   {
+      var offset   = 0.5f;
+      var position = start + direction * offset;
+
+      var asset = G.db.GetAsset(AssetId.Projectile);
+      var go    = SpawnInactive(asset.As<AssetPrefab>());
+      go.transform.position = position;
+      go.GetComponent<ProjectileScript>().OnSpawn(direction);
+      go.SetActive(true);
+   }
 }

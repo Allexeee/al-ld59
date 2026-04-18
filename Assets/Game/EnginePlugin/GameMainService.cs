@@ -14,6 +14,7 @@ public class GameMainService : MonoBehaviour
    [SerializeField] GameManager      gameManager;
    [SerializeField] AudioManager     audioManager;
    [SerializeField] SchedulerManager schedulerManager;
+   [SerializeField] CameraService    cameraService;
 
    void Awake()
    {
@@ -27,6 +28,7 @@ public class GameMainService : MonoBehaviour
       G.poolAnyObject  = new PoolAnyObject();
       G.events         = new EventsService();
       G.scheduler      = schedulerManager;
+      G.camera         = cameraService;
 
       var factoryGameObject = new AudioGameObjectFactory(G.poolGameObject);
       var factoryAudio      = new AudioFactory(factoryGameObject, "Content/Prefabs/[Sound] World Default");

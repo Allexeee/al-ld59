@@ -34,6 +34,6 @@ public class SpotRadarScript : UnityScript, IGameCanBuildRadar, IInteractable
 
    public void Interact()
    {
-      G.game.BuildRadar(this);
+      G.game.RadarBuild(this);
    }
 }
