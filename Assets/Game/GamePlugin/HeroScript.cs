@@ -3,12 +3,13 @@ using AssetsPlugin;
 using UnityEngine;
 
 
-public class HeroScript : UnityScript
+public class HeroScript : UnityScript, IStunnable
 {
    HeroPresentation presentation;
    AssetContainer   asset;
 
-   HeroState state;
+   public HeroState state { get; private set; }
+   GameTimestamp    timestampStun;
 
    protected override void OnAwake()
    {
@@ -16,19 +17,21 @@ public class HeroScript : UnityScript
       // presentation = GetComponent<HeroPresentation>();
       // asset        = G.db.GetAsset(AssetId.Hero);
       // state        = HeroState.Default;
-      G.game.hero  = this;
+      G.game.hero = this;
+      usePause    = true;
    }
 
    protected override void OnFixedUpdate()
    {
       base.OnFixedUpdate();
 
-      // switch (state)
-      // {
-      //    case HeroState.Default:
-      //       DoMove();
-      //       break;
-      // }
+      switch (state)
+      {
+         case HeroState.Stunned:
+            if (timestampStun.TimePassed(1f))
+               state = HeroState.Default;
+            break;
+      }
    }
    //
    // void DoMove()
@@ -60,10 +63,21 @@ public class HeroScript : UnityScript
    //    var speed = asset.As<AssetMovement>().speed;
    //    presentation.AddPosition(movement * speed * Time.deltaTime);
    // }
+   public Vector2 GetStunCenterPosition()
+   {
+      return transform.position;
+   }
+
+   public void    Stun()
+   {
+      state = HeroState.Stunned;
+      timestampStun.Stamp();
+   }
 }
 
 public enum HeroState
 {
    None,
    Default,
+   Stunned
 }

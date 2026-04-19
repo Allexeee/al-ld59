@@ -21,6 +21,6 @@ public class SpotStructurePresentation : MonoBehaviour
    
    public void ShowButton()
    {
-      btn = G.spawner.SpawnUiBtnInteract(transform.position.WithOffsetY(-0.8f));
+      // btn = G.spawner.SpawnUiBtnInteract(transform.position.WithOffsetY(-0f));
    }
 }

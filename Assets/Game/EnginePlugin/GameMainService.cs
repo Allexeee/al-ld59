@@ -14,7 +14,7 @@ public class GameMainService : MonoBehaviour
    [SerializeField] GameManager      gameManager;
    [SerializeField] AudioManager     audioManager;
    [SerializeField] SchedulerManager schedulerManager;
-   [SerializeField] CameraService    cameraService;
+   [SerializeField] CameraManager    cameraManager;
 
    void Awake()
    {
@@ -28,16 +28,23 @@ public class GameMainService : MonoBehaviour
       G.poolAnyObject  = new PoolAnyObject();
       G.events         = new EventsService();
       G.scheduler      = schedulerManager;
-      G.camera         = cameraService;
+      G.camera         = cameraManager;
+      G.timeline       = new GameTimeline();
+      G.vars           = new();
 
       var factoryGameObject = new AudioGameObjectFactory(G.poolGameObject);
       var factoryAudio      = new AudioFactory(factoryGameObject, "Content/Prefabs/[Sound] World Default");
       audioManager.Inject(factoryAudio);
 
-      schedulerManager.Inject(onRelease: G.poolAnyObject.Add);
+      schedulerManager.Inject(OnRelease);
 
       G.db.Init();
       gameManager.SceneLoading();
+   }
+
+   void OnRelease(ICommand obj)
+   {
+      G.poolAnyObject.Add(obj);
    }
 
    void Start()

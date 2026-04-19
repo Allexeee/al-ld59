@@ -45,13 +45,13 @@ public class SpawnerManager : MonoBehaviour
 
    public void SpawnEnemy(Vector2 position)
    {
-      var asset = G.db.GetAsset(AssetId.Enemy);
+      var asset = G.db.GetAsset(AssetId.EnemyA);
       var go    = SpawnInactive(asset.As<AssetPrefab>());
       go.transform.position = position;
       go.SetActive(true);
    }
 
-   public void SpawnProjectile(Vector2 start, Vector2 direction)
+   public void SpawnProjectile(Vector2 start, Vector2 direction, int damage)
    {
       var offset   = 0.5f;
       var position = start + direction * offset;
@@ -59,7 +59,16 @@ public class SpawnerManager : MonoBehaviour
       var asset = G.db.GetAsset(AssetId.Projectile);
       var go    = SpawnInactive(asset.As<AssetPrefab>());
       go.transform.position = position;
-      go.GetComponent<ProjectileScript>().OnSpawn(direction);
+      go.GetComponent<ProjectileScript>().OnSpawn(direction, damage);
       go.SetActive(true);
+   }
+
+   public GameObject SpawnUniversal(Vector2 position, AssetId assetId)
+   {
+      var asset = G.db.GetAsset(assetId);
+      var go    = SpawnInactive(asset.As<AssetPrefab>());
+      go.transform.position = position;
+      go.SetActive(true);
+      return go;
    }
 }

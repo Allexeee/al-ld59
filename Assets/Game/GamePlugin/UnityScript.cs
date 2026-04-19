@@ -1,8 +1,12 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class UnityScript : MonoBehaviour
+public abstract class UnityScript : MonoBehaviour, IGamePaused
 {
+   protected bool usePause;
+
+   bool paused;
+
    void Awake()
    {
       OnAwake();
@@ -10,11 +14,13 @@ public abstract class UnityScript : MonoBehaviour
 
    void Update()
    {
+      if (paused) return;
       OnUpdate();
    }
-   
+
    void FixedUpdate()
    {
+      if (paused) return;
       OnFixedUpdate();
    }
 
@@ -24,16 +30,19 @@ public abstract class UnityScript : MonoBehaviour
 
    protected virtual void OnAwake()
    {
-      
    }
 
    protected virtual void OnUpdate()
    {
-      
    }
-   
+
    protected virtual void OnFixedUpdate()
    {
-      
+   }
+
+   public void OnPaused(bool paused)
+   {
+      if (usePause)
+         this.paused = paused;
    }
 }

@@ -3,6 +3,6 @@ using UnityEngine;
 
 public interface IInteractable : IEventAbstract
 {
-   public Vector2 GetInteractCenterPosition();
+   Vector2 GetInteractCenterPosition();
    void           Interact();
 }

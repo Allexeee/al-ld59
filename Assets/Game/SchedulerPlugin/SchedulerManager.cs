@@ -18,7 +18,6 @@ public class SchedulerManager : MonoBehaviour
 
    public void Inject(Action<ICommand> onRelease) => this.onRelease = onRelease;
 
-   // Запланировать выполнение команды через delay, с повторами repeat
    public void Schedule(ICommand cmd, float delay, int repeats = 0, float repeatDelay = 0)
    {
       jobs.Add(new Entry {
@@ -29,11 +28,9 @@ public class SchedulerManager : MonoBehaviour
       });
    }
 
-   void Update()
+   public void OnUpdate(float dt)
    {
-      // Т.к. будут удаляться элементы — идём с конца!
-      var dt = Time.deltaTime;
-      for (int i = jobs.Count - 1; i >= 0; --i)
+      for (var i = jobs.Count - 1; i >= 0; --i)
       {
          var entry = jobs[i];
          entry.delay -= dt;

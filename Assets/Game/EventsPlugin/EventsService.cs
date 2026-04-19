@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace EventsPlugin
 {
    public class EventsService

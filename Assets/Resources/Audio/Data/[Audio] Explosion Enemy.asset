@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f26e4776694e47b9896ee86d7e8b4ee8, type: 3}
+  m_Name: '[Audio] Explosion Enemy'
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 9025328877309701938, guid: a91ed336aca974943a110528ffcd9ecb, type: 3}
+  clips:
+  - {fileID: 8300000, guid: bd98f7a38e6482c46affe04503592b55, type: 3}
+  - {fileID: 8300000, guid: a749af5389781764b829236114c66bb6, type: 3}
+  - {fileID: 8300000, guid: 71dd01679149ef845b3beb1601fcabab, type: 3}
+  - {fileID: 8300000, guid: 6155c4174afff1f4aa724594c8c06bf9, type: 3}
+  minVolume: 0.8
+  maxVolume: 1
+  minPitch: 0.8
+  maxPitch: 1
+  groupAntiSpam: 0
+  soundPlaybackRateLimit: 0
+  soundPlaybackChance: 1

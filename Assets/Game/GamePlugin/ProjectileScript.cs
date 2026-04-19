@@ -8,15 +8,20 @@ public class ProjectileScript : UnityScript
    AssetContainer                          asset;
    Vector2                                 direction;
 
+   public int damage;
+
    protected override void OnAwake()
    {
       base.OnAwake();
-      asset = G.db.GetAsset(AssetId.Projectile);
+      asset    = G.db.GetAsset(AssetId.Projectile);
+      usePause = true;
    }
 
-   public void OnSpawn(Vector2 direction)
+   public void OnSpawn(Vector2 direction, int damage)
    {
       this.direction = direction;
+      this.damage    = damage;
+      presentation.SetRotateByDirection(direction);
    }
 
    protected override void OnFixedUpdate()
@@ -24,12 +29,18 @@ public class ProjectileScript : UnityScript
       base.OnFixedUpdate();
       var speed = asset.As<AssetMovement>().speed;
       presentation.AddPosition(direction * speed * Time.deltaTime);
-      presentation.RotateByDirection(direction);
+
+      if (!G.camera.rect.Contains(transform.position))
+      {
+         G.spawner.Despawn(gameObject);  
+      }
    }
 
-   void OnCollisionEnter2D(Collision2D col)
+   void OnTriggerEnter2D(Collider2D col)
    {
-      if (col.gameObject.TryGetComponent<EnemyScript>(out var enemyScript))
-         G.game.OnProjectileCollisionWithEnemy(gameObject, enemyScript);
+      if (col.gameObject.TryGetComponent<EnemyAScript>(out var enemyScript))
+      {
+         G.game.OnProjectileCollisionWithEnemy(this, enemyScript);
+      }
    }
 }

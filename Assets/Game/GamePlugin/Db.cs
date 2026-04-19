@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AssetsPlugin;
 using AudioPlugin;
 
@@ -15,6 +16,10 @@ public partial class Db
    {
       MakeAssets(assets);
       assets.RegisterAssets();
+
+      var triggers = new List<(Func<bool> condition, Action action)>();
+      MakeTimeline(triggers);
+      G.timeline.RegisterTriggers(triggers);
    }
 
    public IAudioPreset GetAudio(AssetId id)
