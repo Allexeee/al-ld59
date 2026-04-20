@@ -43,13 +43,13 @@ public class SpawnerManager : MonoBehaviour
       go.SetActive(true);
    }
 
-   public void SpawnEnemy(Vector2 position)
-   {
-      var asset = G.db.GetAsset(AssetId.EnemyA);
-      var go    = SpawnInactive(asset.As<AssetPrefab>());
-      go.transform.position = position;
-      go.SetActive(true);
-   }
+   // public void SpawnEnemy(Vector2 position)
+   // {
+   //    var asset = G.db.GetAsset(AssetId.EnemyLevel1);
+   //    var go    = SpawnInactive(asset.As<AssetPrefab>());
+   //    go.transform.position = position;
+   //    go.SetActive(true);
+   // }
 
    public void SpawnProjectile(Vector2 start, Vector2 direction, int damage)
    {
@@ -65,10 +65,40 @@ public class SpawnerManager : MonoBehaviour
 
    public GameObject SpawnUniversal(Vector2 position, AssetId assetId)
    {
+      // if (assetId == AssetId.UpgradeWeapon)
+      // {
+      //    if (G.game.spawnedUpgrades >= G.game.maxUpgrades) return default;
+      //    if (!G.camera.rect.Contains(position)) return default;
+      //    G.game.spawnedUpgrades++;
+      // }
+
+      if (assetId == AssetId.EnemyBoss)
+      {
+         G.game.bossSpawned = true;
+         G.game.timestampBossSpawned.Stamp();
+      }
+      
       var asset = G.db.GetAsset(assetId);
       var go    = SpawnInactive(asset.As<AssetPrefab>());
       go.transform.position = position;
+
+      if (go.TryGetComponent(out EnemyAScript enemyAScript))
+         enemyAScript.OnSpawn(assetId);
+
       go.SetActive(true);
       return go;
+   }
+
+   public void TrySpawnUpgrade(Vector3 position)
+   {
+      if (G.game.spawnedUpgrades >= G.game.allowSpawnUpgrade) return;
+      if (G.game.spawnedUpgrades >= G.game.maxUpgrades - 1) return;
+      if (!G.camera.rect.Contains(position)) return;
+
+      G.game.spawnedUpgrades++;
+      var asset = G.db.GetAsset(AssetId.UpgradeWeapon);
+      var go    = SpawnInactive(asset.As<AssetPrefab>());
+      go.transform.position = position;
+      go.SetActive(true);
    }
 }

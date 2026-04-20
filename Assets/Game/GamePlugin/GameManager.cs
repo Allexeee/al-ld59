@@ -23,6 +23,15 @@ public class GameManager : MonoBehaviour
 
    HandlerPauseGame handlerPauseGame;
    bool             paused;
+   float            timeShot;
+
+   public int           countUpgrades;
+   public int           spawnedUpgrades;
+   public int           maxUpgrades = 4;
+   public int           allowSpawnUpgrade;
+   public bool          bossSpawned;
+   public bool          bossDead;
+   public GameTimestamp timestampBossSpawned;
 
    void Awake()
    {
@@ -37,6 +46,8 @@ public class GameManager : MonoBehaviour
       gameEndPresentation.SetAlpha(0f);
 
       G.camera.Zoom(0.5f);
+      countUpgrades = 1;
+      // allowSpawnUpgrade = 1;
    }
 
    public void SceneLoading()
@@ -77,15 +88,22 @@ public class GameManager : MonoBehaviour
 
             if (radar != default)
             {
+               var s = 1f;
+               if (bossSpawned && !bossDead)
+                  s = 0f;
+
                gameRadarSendSignal.Progress(dt, 1f);
                var ratio = gameRadarSendSignal.progress / G.db.GetAsset(AssetId.RadarSignal).As<AssetRadarSignal>().max;
                sendSignalPresentation.SetProgress(ratio);
 
                if (ratio >= 1f)
                {
-                  state = GameState.WinChoose;
-                  SetGamePause(true);
-                  gameWinPresentation.DoFade(1);
+                  if (bossSpawned && bossDead || !bossSpawned || bossSpawned && timestampBossSpawned.WithSince(15f))
+                  {
+                     state = GameState.WinChoose;
+                     SetGamePause(true);
+                     gameWinPresentation.DoFade(1);
+                  }
                }
             }
 
@@ -181,8 +199,6 @@ public class GameManager : MonoBehaviour
       }
    }
 
-   float timeShot;
-
    void DoHeroShoot()
    {
       // if (heroController.wantShot)
@@ -194,7 +210,62 @@ public class GameManager : MonoBehaviour
             timeShot = Time.time;
             var direction = GetDirectionToMouse();
             G.audio.Play(hero.transform.position, AssetId.HeroSfxShoot);
-            G.spawner.SpawnProjectile(hero.transform.position, direction, asset.As<AssetDamage>().damage);
+
+            if (countUpgrades == 1)
+            {
+               G.spawner.SpawnProjectile(hero.transform.position, direction, asset.As<AssetDamage>().damage);
+            }
+
+            if (countUpgrades == 2)
+            {
+               float offset = 0.4f;                                   // расстояние между линиями
+               var   perp   = new Vector2(-direction.y, direction.x); // нормализованный вектор перпендикуляра
+
+               // Стартовые позиции для двух линий (лево и право)
+               var leftPos  = hero.transform.position + (Vector3) (perp * offset * 0.5f);
+               var rightPos = hero.transform.position - (Vector3) (perp * offset * 0.5f);
+
+               G.spawner.SpawnProjectile(leftPos,  direction, asset.As<AssetDamage>().damage);
+               G.spawner.SpawnProjectile(rightPos, direction, asset.As<AssetDamage>().damage);
+            }
+
+            if (countUpgrades == 3)
+            {
+               float offset = 0.5f;                                   // расстояние между линиями
+               var   perp   = new Vector2(-direction.y, direction.x); // нормализованный вектор перпендикуляра
+
+               // Стартовые позиции для двух линий (лево и право)
+               var pos1 = hero.transform.position + (Vector3) (perp * offset * 0.5f);
+               var pos2 = hero.transform.position - (Vector3) (perp * offset * 0f);
+               var pos3 = hero.transform.position - (Vector3) (perp * offset * 0.5f);
+
+               G.spawner.SpawnProjectile(pos1, direction, asset.As<AssetDamage>().damage);
+               G.spawner.SpawnProjectile(pos2, direction, asset.As<AssetDamage>().damage);
+               G.spawner.SpawnProjectile(pos3, direction, asset.As<AssetDamage>().damage);
+            }
+
+            if (countUpgrades == 4)
+            {
+               float offset = 0.5f;                                   // расстояние между линиями
+               var   perp   = new Vector2(-direction.y, direction.x); // нормализованный вектор перпендикуляра
+
+               // Стартовые позиции для двух линий (лево и право)
+               var pos1 = hero.transform.position + (Vector3) (perp * offset * 0.5f);
+               var pos2 = hero.transform.position - (Vector3) (perp * offset * 0f);
+               var pos3 = hero.transform.position - (Vector3) (perp * offset * 0.5f);
+
+               G.spawner.SpawnProjectile(pos1, direction, asset.As<AssetDamage>().damage);
+               G.spawner.SpawnProjectile(pos2, direction, asset.As<AssetDamage>().damage);
+               G.spawner.SpawnProjectile(pos3, direction, asset.As<AssetDamage>().damage);
+
+               // Дополнительно: два под углом
+               float   angleDegrees = 15f; // угол отклонения влево и вправо
+               Vector2 dirLeft      = Quaternion.Euler(0, 0, angleDegrees)  * direction;
+               Vector2 dirRight     = Quaternion.Euler(0, 0, -angleDegrees) * direction;
+
+               G.spawner.SpawnProjectile(pos1, dirLeft,  asset.As<AssetDamage>().damage);
+               G.spawner.SpawnProjectile(pos3, dirRight, asset.As<AssetDamage>().damage);
+            }
          }
       }
    }
@@ -219,6 +290,7 @@ public class GameManager : MonoBehaviour
 
       sendSignalPresentation.SetVisible(true);
       sendSignalPresentation.SetProgress(0f);
+      sendSignalPresentation.Appear();
 
       var seq = Sequence.Create();
       seq.Chain(Tween.ShakeCamera(Camera.main, 5f, 0.2f, 100));
@@ -227,15 +299,20 @@ public class GameManager : MonoBehaviour
 
    public void RadarDamage(EnemyAScript source)
    {
-      source.Kill();
-      radar.GetDamage();
-      Tween.ShakeCamera(Camera.main, 2.5f, 0.2f, 50);
+      if (source.assetId == AssetId.EnemyBoss)
+         RadarDestroy();
+      else
+      {
+         source.Kill();
+         radar.GetDamage();
+         Tween.ShakeCamera(Camera.main, 2.5f, 0.2f, 50);
+      }
    }
 
    public void RadarDestroy()
    {
       if (state != GameState.Default) return;
-      Debug.Log("Radar Destroy");
+      Debug.Log($"Radar Destroy. Time: {G.vars.timestampBuildRadar.now - G.vars.timestampBuildRadar.timestamp}");
 
       Tween.ShakeCamera(Camera.main, 2.5f, 5f, 100);
       G.scheduler.Schedule(PlayAudioCommand.Get(radar.transform.position, AssetId.EnemySfxDestroy), 0f, 5, 0.1f);
@@ -271,6 +348,27 @@ public class GameManager : MonoBehaviour
    }
 
    public void SetPause(bool val) => SetGamePause(val);
+
+   public void WeaponUpgrade(UpgradeScript script)
+   {
+      countUpgrades++;
+
+      G.audio.Play(hero.transform.position, AssetId.UpgradeWeapon);
+
+      heroPresentation.Punch();
+      G.spawner.Despawn(script.gameObject);
+   }
+
+   public void KillEnemy(EnemyAScript enemyScript)
+   {
+      if (enemyScript.assetId != AssetId.EnemyLevel1)
+         G.spawner.TrySpawnUpgrade(enemyScript.transform.position);
+
+      if (enemyScript.assetId == AssetId.EnemyBoss)
+         bossDead = true;
+
+      enemyScript.Kill();
+   }
 }
 
 public enum GameState

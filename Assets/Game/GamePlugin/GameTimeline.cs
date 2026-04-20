@@ -21,11 +21,16 @@ public class GameTimeline
       }
    }
 
-   public void Update(float dt)
+   public void UpdateTime(float dt)
    {
       gameTimePrev =  gameTime;
       gameTime     += dt;
+   }
 
+   public void Update(float dt)
+   {
+      UpdateTime(dt);
+      
       foreach (var evt in events)
       {
          if (!evt.triggered && evt.condition()) // объект evt условие получил true

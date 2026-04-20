@@ -1,10 +1,12 @@
 ﻿using System;
 using AssetsPlugin;
+using PrimeTween;
 using UnityEngine;
 
 public class HeroPresentation : MonoBehaviour
 {
    [SerializeField]     Transform      body;
+   [SerializeField]     Transform      view;
    [SerializeField] new Rigidbody2D    rigidbody;
    public               AssetContainer asset;
 
@@ -23,5 +25,10 @@ public class HeroPresentation : MonoBehaviour
    {
       rigidbody.MoveRotation(euler);
       // body.rotation = euler;
+   }
+
+   public void Punch()
+   {
+      Tween.PunchScale(view, Vector3.one * 3f, 0.2f);
    }
 }

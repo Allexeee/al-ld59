@@ -286,7 +286,7 @@ MonoBehaviour:
   - {x: -0.041690826, y: -0.5024233, z: 0}
   m_ShapePathHash: 165674559
   m_Mesh: {fileID: 0}
-  m_InstanceId: 36642
+  m_InstanceId: 47280
   m_LocalBounds:
     m_Center: {x: -0.0035586357, y: 0.030821443, z: 0}
     m_Extent: {x: 0.5071187, y: 0.5332447, z: 0}
@@ -321,7 +321,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.78, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3874507227804817390}
   m_Father: {fileID: 0}
@@ -339,7 +339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   presentation: {fileID: 6082303799554974985}
-  countDamage: 0
+  assetId: 0
 --- !u!114 &6082303799554974985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,6 +353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 3118406464499299583}
+  body: {fileID: 3946762821534117858}
   lastDirection: {x: 0, y: 0}
 --- !u!50 &3118406464499299583
 Rigidbody2D:

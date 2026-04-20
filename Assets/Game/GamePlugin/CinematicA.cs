@@ -29,6 +29,9 @@ public class CinematicA : MonoBehaviour
       // light.pointLightOuterRadius = 1f;
 
       G.camera.inCinema = true;
+      
+      yield return Tween.LocalPosition(G.camera.transform, new Vector3(0f, 0f, -10f), 0.2f).ToYieldInstruction();
+      yield return new WaitForSeconds(0.2f);
 
       var t = Tween.ShakeCamera(Camera.main, 5f, 10f, 100);
 
@@ -53,7 +56,7 @@ public class CinematicA : MonoBehaviour
       seq2.Group(Tween.Custom(this,     light.intensity,             0f,  1.2f, ((a, f) => a.light.intensity             = f)));
       seq2.Group(Tween.Custom(G.camera, G.camera.zoom,               min, 1.6f, ((a, f) => a.CinemaZoom(f))));
 
-      yield return seq2;
+      yield return seq2.ToYieldInstruction();
       yield return new WaitForSeconds(0.5f);
 
       gameManager.SetPause(true);
@@ -63,17 +66,17 @@ public class CinematicA : MonoBehaviour
 
       var seq3 = Sequence.Create();
       seq3.ChainDelay(0.1f);
-      seq3.Group(Tween.Custom(G.camera, G.camera.zoom,               max,  1f, ((a, f) => a.CinemaZoom(f))));
-      
+      seq3.Group(Tween.Custom(G.camera, G.camera.zoom, max, 1f, ((a, f) => a.CinemaZoom(f))));
+
       // seq3.Group(Tween.Custom(this, light.intensity,             100f, 2f, ((a, f) => a.light.intensity             = f)));
 
-      yield return seq3;
+      yield return seq3.ToYieldInstruction();
 
       var seq4 = Sequence.Create();
       seq4.ChainDelay(0.2f);
-      seq4.Group(Tween.Custom(this,     light.pointLightOuterRadius, 60f, 0.5f,   ((a, f) => a.light.pointLightOuterRadius = f)));
-      seq4.Group(Tween.Custom(this,     light.pointLightInnerRadius, 50f, 0.5f,   ((a, f) => a.light.pointLightInnerRadius = f)));
-      yield return seq4;
+      seq4.Group(Tween.Custom(this, light.pointLightOuterRadius, 60f, 0.5f, ((a, f) => a.light.pointLightOuterRadius = f)));
+      seq4.Group(Tween.Custom(this, light.pointLightInnerRadius, 50f, 0.5f, ((a, f) => a.light.pointLightInnerRadius = f)));
+      yield return seq4.ToYieldInstruction();
 
       yield return new WaitForSeconds(1f);
 

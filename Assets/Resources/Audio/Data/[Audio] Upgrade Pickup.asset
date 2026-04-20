@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f26e4776694e47b9896ee86d7e8b4ee8, type: 3}
-  m_Name: '[Audio] Hit Enemy'
+  m_Name: '[Audio] Upgrade Pickup'
   m_EditorClassIdentifier: 
   prefab: {fileID: 9025328877309701938, guid: a91ed336aca974943a110528ffcd9ecb, type: 3}
   clips:
-  - {fileID: 8300000, guid: a17d894eb96ec5a429dedb93f1fea291, type: 3}
-  minVolume: 0.9
+  - {fileID: 8300000, guid: a13705a12a250fd4f94509094c57a76e, type: 3}
+  minVolume: 0.8
   maxVolume: 1
-  minPitch: 0.8
-  maxPitch: 1.1
-  groupAntiSpam: 2
-  soundPlaybackRateLimit: 3
+  minPitch: 1
+  maxPitch: 1
+  groupAntiSpam: 0
+  soundPlaybackRateLimit: 0
   soundPlaybackChance: 1

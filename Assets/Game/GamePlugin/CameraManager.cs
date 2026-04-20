@@ -17,17 +17,17 @@ public class CameraManager : MonoBehaviour
       orthographicSizeBase = camera.orthographicSize;
    }
 
-   void FixedUpdate()
+   void Update()
    {
-      var height = camera.orthographicSize * 2f;
-      var width  = height                  * camera.aspect;
+      Vector3 bottomLeft = camera.ViewportToWorldPoint(new Vector3(0, 0, camera.nearClipPlane));
+      Vector3 topRight   = camera.ViewportToWorldPoint(new Vector3(1, 1, camera.nearClipPlane));
 
-      var pos = transform.position;
-
-      var xMin = pos.x - width  * 0.5f;
-      var yMin = pos.y - height * 0.5f;
-
-      rect = new Rect(xMin, yMin, width, height);
+      rect = new Rect(
+         bottomLeft.x,
+         bottomLeft.y,
+         topRight.x - bottomLeft.x,
+         topRight.y - bottomLeft.y
+      );
    }
 
    void LateUpdate()
@@ -58,5 +58,11 @@ public class CameraManager : MonoBehaviour
    {
       inCinema  = true;
       this.zoom = zoom;
+   }
+
+   void OnDrawGizmos()
+   {
+      Gizmos.color = Color.red;
+      Gizmos.DrawWireCube(rect.center, rect.size);
    }
 }

@@ -21,7 +21,7 @@ public class AL_Sandbox : MonoBehaviour, IEventSceneReady
    {
       if (Input.GetKeyDown(KeyCode.Keypad0))
       {
-         G.spawner.SpawnEnemy(new Vector2(7f, 0f));
+         // G.spawner.SpawnEnemy(new Vector2(7f, 0f));
          // G.audio.Play(Vector2.zero, AssetId.AudioTest);
       }     
       //

@@ -25,13 +25,13 @@ public class CinematicD : MonoBehaviour
       hero.GetComponent<Collider2D>().enabled = false;
       spaceShip.transform.Find("View/C").gameObject.SetActive(false);
       
-      yield return Tween.PositionAtSpeed(spaceShip.transform, startPos, hero.transform.position, 5f, Easing.Standard(Ease.OutSine));
+      yield return Tween.PositionAtSpeed(spaceShip.transform, startPos, hero.transform.position, 5f, Easing.Standard(Ease.OutSine)).ToYieldInstruction();
 
       hero.SetActive(false);
       spaceShip.transform.Find("View/B").gameObject.SetActive(false);
       spaceShip.transform.Find("View/C").gameObject.SetActive(true);
 
-      yield return Tween.PositionAtSpeed(spaceShip.transform, endPos, 7f, Easing.Standard(Ease.InSine));
+      yield return Tween.PositionAtSpeed(spaceShip.transform, endPos, 7f, Easing.Standard(Ease.InSine)).ToYieldInstruction();
 
       yield return new WaitForSeconds(1f);
 

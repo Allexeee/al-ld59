@@ -8,8 +8,9 @@ public class EnemyAScript : UnityScript
    [SerializeField] EnemyPresentation presentation;
    AssetContainer                     asset;
 
-   public int countDamage;
-
+   public AssetId assetId;
+   
+   int        countDamage;
    EnemyState state;
    Vector3    target;
 
@@ -17,8 +18,17 @@ public class EnemyAScript : UnityScript
    {
       base.OnAwake();
       state    = EnemyState.MoveToRadar;
-      asset    = G.db.GetAsset(AssetId.EnemyA);
       usePause = true;
+   }
+
+   public void OnSpawn(AssetId assetId)
+   {
+      this.assetId = assetId;
+      asset        = G.db.GetAsset(assetId);
+      countDamage  = default;
+
+      presentation.rb.position = transform.position;
+      presentation.SetSize(asset.As<AssetSize>().size);
    }
 
    protected override void OnFixedUpdate()
@@ -62,7 +72,8 @@ public class EnemyAScript : UnityScript
       {
          // todo: эффекты, звуки
 
-         Kill();
+         G.game.KillEnemy(this);
+         // Kill();
          // G.spawner.SpawnUniversal(transform.position, AssetId.EnemyVfxDestroy);
          // G.audio.Play(transform.position, AssetId.EnemySfxDestroy);
          // G.spawner.Despawn(gameObject);

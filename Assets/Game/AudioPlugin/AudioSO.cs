@@ -46,6 +46,7 @@ namespace AudioPlugin
    public enum AudioAntiSpam
    {
       None,
-      Shoot
+      Shoot,
+      Hits
    }
 }
